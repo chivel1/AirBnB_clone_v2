@@ -14,7 +14,10 @@ class FileStorage:
             or if cls_name is not None, return
             only items whose key start with it.
         """
-        cls_name = cls if type(cls) is str else cls.__name__
+        cls_name = None
+        if cls is not None:
+            cls_name = cls if type(cls) is str else cls.__name__
+
         if cls_name is not None:
             items = {}
             for key in self.__objects.keys():
