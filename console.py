@@ -37,7 +37,7 @@ class HBNBCommand(cmd.Cmd):
     def preloop(self):
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
-            print('(hbnb)')
+            print('(hbnb)', end=" ")
 
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
@@ -249,21 +249,22 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
-        print_list = []
-
+        cls_name = None
         if args:
-            args = args.split(' ')[0]  # remove possible trailing args
+            cls_name = args.split(' ')[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage.all().items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
-        else:
-            for k, v in storage.all().items():
-                print_list.append(str(v))
 
-        print(print_list)
+        print("[", end="")
+        items = storage.all(HBNBCommand.classes[cls_name])
+        itemsLen = len(items)
+        for index, key in enumerate(items):
+            print(
+                "{}".format(items[key]),
+                end=(", " if index < itemsLen - 1 else "")
+            )
+        print("]")
 
     def help_all(self):
         """ Help information for the all command """
