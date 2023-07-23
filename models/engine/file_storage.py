@@ -9,15 +9,23 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
-        """Returns a dictionary of models currently in storage"""
-        if cls is None:
-            return self.__objects
-        cls_name = cls.__name__
-        dct = {}
-        for key in self.__objects.keys():
-            if key.split('.')[0] == cls_name:
-                dct[key] = self.__objects[key]
-        return dct
+        """
+            Returns the dictionary __objects
+            or if cls_name is not None, return
+            only items whose key start with it.
+        """
+        cls_name = None
+        if cls is not None:
+            cls_name = cls if type(cls) is str else cls.__name__
+
+        if cls_name is not None:
+            items = {}
+            for key in self.__objects.keys():
+                if key.startswith(cls_name):
+                    items[key] = self.__objects[key]
+            return items
+
+        return self.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
